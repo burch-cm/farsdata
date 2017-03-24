@@ -11,9 +11,9 @@
 #' \dontrun{
 #' fars_read("./my_csv_file.csv")
 #' }
-#' @export
 #' @importFrom readr read_csv
 #' @importFrom dplyr tbl_df
+#' @export
 fars_read <- function(filename) {
         if(!file.exists(filename))
                 stop("file '", filename, "' does not exist")
@@ -53,8 +53,8 @@ make_filename <- function(year) {
 #' fars_read_years(c("2016", "2017"))
 #' fars_read_years(2010:2017)
 #' }
-#' @export
 #' @import dplyr
+#' @export
 fars_read_years <- function(years) {
         lapply(years, function(year) {
                 file <- make_filename(year)
@@ -83,9 +83,9 @@ fars_read_years <- function(years) {
 #' fars_summarize_years(c("2016", "2017"))
 #' fars_summarize_years(1980:1990)
 #' }
-#' @export
-#' @import dplyr, magrittr
+#' @import dplyr
 #' @importFrom tidyr spread
+#' @export
 fars_summarize_years <- function(years) {
         dat_list <- fars_read_years(years)
         dplyr::bind_rows(dat_list) %>%
@@ -110,11 +110,11 @@ fars_summarize_years <- function(years) {
 #' fars_map_state(17, 2016)
 #' fars_map_state(21, "2016")
 #' }
-#' @export
-#' @import dplyr, maps, graphics
+#' @import dplyr
+#' @import maps
 #' @importFrom graphics points
+#' @export
 fars_map_state <- function(state.num, year) {
-        require(maps)
         filename <- make_filename(year)
         data <- fars_read(filename)
         state.num <- as.integer(state.num)

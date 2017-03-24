@@ -9,7 +9,7 @@ fars_map_state(state.num, year)
 \arguments{
 \item{state.num}{A number corresponding to a State in the FARS data.}
 
-\item{year}{A character or number representing the target year.}
+\item{year}{A character or number representing a single target year.}
 }
 \value{
 A plot of the accident locations in the State in the target year
@@ -19,7 +19,7 @@ Draw the location of each accident in a given State in a given year.
 }
 \details{
 Loads the file with the name \code{"accidnet_year.csv.bz2"} where year
-corresponds to the value of \code{year}.
+corresponds to the value of \code{year}. Can only read and map one year at a time.
 Calls map::maps and graphics::points to plot the accidnets by latitude and longtude.
 Will produce an error if the \code{state.num} is incorrect or the file for
 the given year does not exist.
