@@ -1,7 +1,7 @@
 Package: farsdata
 Type: Package
 Title: Read and Summarize FARS Data
-Version: 0.1.0
+Version: 1.0.0
 Author: Dr Phunktacular
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: Opens, reads in, and runs summary functions on data from the Federal Accident Reporting System.
@@ -9,7 +9,14 @@ License: MIT
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 5.0.1
-Suggests: knitr,
+Imports:
+    readr,
+    dplyr,
+    tidyr,
+    maps,
+    graphics
+Suggests: 
+    knitr,
     rmarkdown,
     testthat
 VignetteBuilder: knitr
