@@ -1,0 +1,71 @@
+---
+title: "farsdata"
+author: "Dr Phunktacular"
+output: rmarkdown::html_vignette
+vignette: >
+    %\VignetteIndexEntry{FARS Data}
+    %\VignetteEngine{knitr::rmarkdown}
+    \usepackage[utf8]{inputenc}
+---
+
+# FARS Data
+
+This package loads and manipulates data from the Fatality Analysis
+Reporting System (FARS), part of the US National Highway Transportation Saftey
+Administration.
+
+```{r, echo = FALSE}
+library(farsdata)
+```
+
+## Reading FARS data from a file  
+fars_read(filename)  
+
+The fars_read() function is intended to be called by other functions in the package and is not intended to be called by users, however, it is exported into the NAMESPACE and can be called if you wish to load FARS files by hand.
+
+fars_read() calls dplyr and loads the file as a data frame using dplyr::tbl_df()
+
+```{r}
+filename <- system.file("extdata", "accident_2015.csv.bz2", package = "farsdata")
+fars2015 <- fars_read(filename)
+head(fars2015)
+```
+
+## Read in FARS data for a particular year  
+fars_read_years(years)  
+
+fars_read_years() loads FARS data files from a number of given years, given as either a numeric or character vector of years in a YYYY format. If the file does not exist the function will throw an error. Returns a list containing each year's worth of data.  
+
+The path variable specifies the file location directory relative to the working directory as a character vector  
+
+```{r}
+my_data <- fars_read_years(2015)
+
+```
+
+## Summarize data by year  
+fars_summarize_years(years)  
+
+Calls fars_read_years() and passes the given numeric or character vector of desired years. Each year must be in its own file, labelled in the format "accident_year.csv.bz2" where "year" is a member of the vector years.  
+
+```{r}
+fars_summarize_years(c(2014, 2015))
+y <- c("2014", "2015")
+fars_summarize_years(y)
+```
+
+## Draw a map of accident locations by US State  
+fars_map_state(state.num, year)  
+
+Draws a map using maps::map() and plots the location of each accident in the given year using graphics::points()  
+Year can be a character or numeric year value in the form YYYY, and state is a numeric value.
+
+```{r, warning=FALSE, message=FALSE}
+fars_map_state(17, 2015)
+```
+
+## Package Maintance
+
+This is an example package and is not inteded for production or use outside of a classroom environment.  
+
+This package was made to fulfill a requirement for a Coursea/JHU course in R package development and there are no plans to support the code at this time.

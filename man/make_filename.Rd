@@ -19,6 +19,9 @@ Creates filenames for loading FARS files from a given year
 Takes a character or numeric vector of target years and returns a character
 vector of FARS filenames for the target years in the format \code{"accident_year.csv.bz2"}
 }
+\note{
+This function is internal and not exported
+}
 \examples{
 make_filename("2017")
 make_filename(2017)

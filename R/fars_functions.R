@@ -35,10 +35,10 @@ fars_read <- function(filename) {
 #' make_filename(2017)
 #' make_filename(c("2004", "2005", "2006"))
 #' make_filename(2010:2016)
-#' @export
+#' @note This function is internal and not exported
 make_filename <- function(year) {
         year <- as.integer(year)
-        sprintf("accident_%d.csv.bz2", year)
+        return(sprintf("accident_%d.csv.bz2", year))
 }
 #' @title Read FARS data from given years
 #' @description
@@ -60,7 +60,7 @@ fars_read_years <- function(years) {
                 file <- make_filename(year)
                 tryCatch({
                         dat <- fars_read(file)
-                        dplyr::mutate(dat, year = year) %>% 
+                        dplyr::mutate(dat, year = YEAR) %>%
                                 dplyr::select(MONTH, year)
                 }, error = function(e) {
                         warning("invalid year: ", year)
@@ -73,7 +73,7 @@ fars_read_years <- function(years) {
 #' @description Summary data by year and month from a list of target years.
 #' @param years A character or numeric vector of target \code{years}
 #' @return A data frame
-#' @details 
+#' @details
 #' Loads the FARS files associated with each year, then summarizes by each
 #' year and month in the data.
 #' Data files must be in .bz format and must have the name format of
@@ -84,12 +84,12 @@ fars_read_years <- function(years) {
 #' fars_summarize_years(1980:1990)
 #' }
 #' @export
-#' @import dplyr
+#' @import dplyr, magrittr
 #' @importFrom tidyr spread
 fars_summarize_years <- function(years) {
         dat_list <- fars_read_years(years)
-        dplyr::bind_rows(dat_list) %>% 
-                dplyr::group_by(year, MONTH) %>% 
+        dplyr::bind_rows(dat_list) %>%
+                dplyr::group_by(year, MONTH) %>%
                 dplyr::summarize(n = n()) %>%
                 tidyr::spread(year, n)
 }
@@ -97,11 +97,11 @@ fars_summarize_years <- function(years) {
 #' @description
 #' Draw the location of each accident in a given State in a given year.
 #' @param state.num A number corresponding to a State in the FARS data.
-#' @param year A character or number representing the target year.
+#' @param year A character or number representing a single target year.
 #' @return A plot of the accident locations in the State in the target year
 #' @details
 #' Loads the file with the name \code{"accidnet_year.csv.bz2"} where year
-#' corresponds to the value of \code{year}.
+#' corresponds to the value of \code{year}. Can only read and map one year at a time.
 #' Calls map::maps and graphics::points to plot the accidnets by latitude and longtude.
 #' Will produce an error if the \code{state.num} is incorrect or the file for
 #' the given year does not exist.
@@ -111,14 +111,13 @@ fars_summarize_years <- function(years) {
 #' fars_map_state(21, "2016")
 #' }
 #' @export
-#' @import dplyr
-#' @importFrom maps map
+#' @import dplyr, maps, graphics
 #' @importFrom graphics points
 fars_map_state <- function(state.num, year) {
+        require(maps)
         filename <- make_filename(year)
         data <- fars_read(filename)
         state.num <- as.integer(state.num)
-
         if(!(state.num %in% unique(data$STATE)))
                 stop("invalid STATE number: ", state.num)
         data.sub <- dplyr::filter(data, STATE == state.num)
