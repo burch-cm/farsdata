@@ -115,6 +115,7 @@ fars_summarize_years <- function(years) {
 #' @importFrom graphics points
 #' @export
 fars_map_state <- function(state.num, year) {
+        require(maps)
         filename <- make_filename(year)
         data <- fars_read(filename)
         state.num <- as.integer(state.num)
