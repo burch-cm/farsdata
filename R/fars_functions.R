@@ -22,14 +22,14 @@ fars_read <- function(filename) {
         })
         dplyr::tbl_df(data)
 }
+
 #' @title Make a filename
-#' @description
-#' Creates filenames for loading FARS files from a given year
+#' @description Creates filenames for loading FARS files from a given year.
 #' @param year A character or numeric vector of the desired year(s)
 #' @return A character vector containing FARS filenames for given years
 #' @details
 #' Takes a character or numeric vector of target years and returns a character
-#' vector of FARS filenames for the target years in the format \code{"accident_year.csv.bz2"}
+#' vector of FARS filenames for the target years in the format \code{"accident_year.csv.bz2"}.
 #' @examples
 #' make_filename("2017")
 #' make_filename(2017)
@@ -40,9 +40,9 @@ make_filename <- function(year) {
         year <- as.integer(year)
         return(sprintf("accident_%d.csv.bz2", year))
 }
+
 #' @title Read FARS data from given years
-#' @description
-#' Reads in FARS data files from a given vector of years.
+#' @description Reads in FARS data files from a given vector of years.
 #' @param years a character or numeric vector of target years from which to load data
 #' @return a list of data frames containing data from each target year
 #' @details
@@ -91,11 +91,11 @@ fars_summarize_years <- function(years) {
         dplyr::bind_rows(dat_list) %>%
                 dplyr::group_by(year, MONTH) %>%
                 dplyr::summarize(n = n()) %>%
-                tidyr::spread(year, n)
+                tidyr::spread(., key = year, value = n)
 }
+
 #' @title Draw a map of accidents by State and Year
-#' @description
-#' Draw the location of each accident in a given State in a given year.
+#' @description Draw the location of each accident in a given State in a given year.
 #' @param state.num A number corresponding to a State in the FARS data.
 #' @param year A character or number representing a single target year.
 #' @return A plot of the accident locations in the State in the target year
@@ -115,7 +115,7 @@ fars_summarize_years <- function(years) {
 #' @importFrom graphics points
 #' @export
 fars_map_state <- function(state.num, year) {
-        require(maps)
+        library(maps)
         filename <- make_filename(year)
         data <- fars_read(filename)
         state.num <- as.integer(state.num)

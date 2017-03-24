@@ -13,11 +13,11 @@ make_filename(year)
 A character vector containing FARS filenames for given years
 }
 \description{
-Creates filenames for loading FARS files from a given year
+Creates filenames for loading FARS files from a given year.
 }
 \details{
 Takes a character or numeric vector of target years and returns a character
-vector of FARS filenames for the target years in the format \code{"accident_year.csv.bz2"}
+vector of FARS filenames for the target years in the format \code{"accident_year.csv.bz2"}.
 }
 \note{
 This function is internal and not exported
